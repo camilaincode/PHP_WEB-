@@ -1,32 +1,63 @@
+<?php
+require_once 'errorHandler.php';
+
+$mensagemErro = '';
+if (isset($_GET['error'])) {
+    $mensagemErro = errorHandler::getMensagemError($_GET['error']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style/forms.css">
+    <title>Login</title>
 </head>
 <body>
-    <h2>Login</h2>
-    <?php
-        if (isset($_GET['error'])){
-            if ($_GET['error'] == 'faltando_dados'){
-                echo "<p style='color:red;'>Erro: Por favor, preencha todos os campos.</p>";
-            } elseif ($_GET['error'] == 'credenciais_invalidas'){
-                echo "<p style='color:red;'>Erro: Credenciais inválidas. Tente novamente.</p>";
-            } elseif ($_GET['error'] == 'nao_autenticado'){
-                echo "<p style='color:red;'>Erro: Você precisa estar logado para acessar lista de usuarios.</p>";
-            }
-        }
-    ?>
-    <form action="auth.php" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br><br>
-        <input type="submit" value="Login">
-    </form>
+    <div id="errorAlerta" class="alerta" style="display: none;">
+        <span id="alertaMensagem"></span>
+        <button onclick="fecharAlerta()">&times;</button>
+    </div>
+    <div class="container">
+        <h2>Login</h2>
+        <form action="auth.php" method="POST">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <input type="submit" value="sing in!" class="button">
+        </form>
+    </div>
     
+<script>
+    function showAlerta(mensagem){
+            const alerta = document.getElementById('errorAlerta');
+            const alertaMensagem = document.getElementById('alertaMensagem');
+            alertaMensagem.textContent = mensagem;
+            alerta.style.display = 'flex';
+            setTimeout(fecharAlerta, 5000);
+    }
+
+    function fecharAlerta() {
+            document.getElementById('errorAlerta').style.display = 'none';
+    }
+
+
+    function mostrarErro(mensagem) {
+            showAlerta(mensagem);
+    }
+
+<?php if (!empty($mensagemErro)): ?>
+    document.addEventListener('DOMContentLoaded', function() {
+            mostrarErro('<?php echo $mensagemErro; ?>');
+        });
+<?php endif; ?>
+</script>
+
 </body>
 </html>

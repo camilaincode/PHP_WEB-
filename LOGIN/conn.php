@@ -4,7 +4,7 @@
         $username = "root";
         $password = "";
         $dbname = "database";
-        $port = 3307;
+        $port = 3306;
 
         try {
             $pdo = new PDO("mysql:host=$servername;port=$port;dbname=$dbname;charset=utf8", $username, $password);
@@ -25,7 +25,7 @@
         return $stmt->execute();   
     }
 
-     function get_usuario($id){
+    function get_usuario($id){
         $con= connectar();
         $stmt=$con->prepare("SELECT * FROM usuarios WHERE id = :id");
         $stmt->bindParam(':id', $id);
@@ -33,7 +33,7 @@
         return $stmt->fetch(PDO::FETCH_ASSOC);   
     }
 
-    function finduUserByName($nome){
+    function findUserByName($nome){
         $con= connectar();
         $stmt=$con->prepare("SELECT * FROM usuarios WHERE nome = :nome");
         $stmt->bindParam(':nome', $nome);
